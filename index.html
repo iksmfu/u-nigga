@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Funny Shaking Text</title>
+  <style>
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      overflow: hidden;
+    }
+
+    .animation-container {
+      position: relative;
+    }
+
+    .shaking-text {
+      font-size: 24px;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      animation: shake 0.5s ease-in-out infinite;
+    }
+
+    .moving-text {
+      font-size: 18px;
+      font-family: 'Comic Sans MS', cursive, sans-serif;
+      position: absolute;
+      left: -100px;
+      animation: moveRight 2s linear infinite, moveUpDown 1s alternate infinite;
+    }
+
+    @keyframes shake {
+      0%, 100% {
+        transform: translateX(0);
+      }
+      25%, 75% {
+        transform: translateX(-10px);
+      }
+      50% {
+        transform: translateX(10px);
+      }
+    }
+
+    @keyframes moveRight {
+      0% {
+        left: -100px;
+      }
+      100% {
+        left: 100%;
+      }
+    }
+
+    @keyframes moveUpDown {
+      0%, 100% {
+        transform: translateY(0);
+      }
+      50% {
+        transform: translateY(-20px);
+      }
+    }
+
+    @keyframes duplicateAndMove {
+      0%, 100% {
+        transform: translate(0, 0);
+      }
+      50% {
+        transform: translate(randomX(), randomY());
+      }
+    }
+
+    @keyframes shakeDuplicate {
+      0%, 100% {
+        transform: translate(0, 0) rotate(0deg);
+      }
+      25% {
+        transform: translate(-10px, -10px) rotate(10deg);
+      }
+      50% {
+        transform: translate(10px, 10px) rotate(-10deg);
+      }
+      75% {
+        transform: translate(-10px, 10px) rotate(10deg);
+      }
+    }
+
+    @keyframes randomizeStart {
+      from {
+        transform: translate(randomX(), randomY());
+      }
+    }
+
+    @keyframes randomizeEnd {
+      to {
+        transform: translate(randomX(), randomY());
+      }
+    }
+
+    @keyframes randomSize {
+      0%, 100% {
+        font-size: 18px;
+      }
+      50% {
+        font-size: 24px;
+      }
+    }
+
+    function randomX() {
+      return Math.random() * window.innerWidth + 'px';
+    }
+
+    function randomY() {
+      return Math.random() * window.innerHeight + 'px';
+    }
+  </style>
+</head>
+<body>
+  <div class="animation-container">
+    <div class="shaking-text">Nigga Clicked This!</div>
+    <div class="moving-text" id="upwardsText">Nigga</div>
+  </div>
+
+  <script>
+    setInterval(function() {
+      duplicateAndMove();
+    }, 5000);
+
+    function duplicateAndMove() {
+      const originalText = document.getElementById('upwardsText');
+      const newText = originalText.cloneNode(true);
+      newText.style.animationName = 'randomizeStart';
+      newText.style.animationDuration = '2s';
+      newText.style.animationTimingFunction = 'linear';
+      newText.style.animationFillMode = 'forwards';
+      newText.style.animationIterationCount = '1';
+      newText.style.animationPlayState = 'running';
+
+      originalText.parentNode.appendChild(newText);
+
+      newText.addEventListener('animationend', function() {
+        newText.style.animationName = 'randomSize, shakeDuplicate, randomizeEnd';
+        newText.style.animationDuration = '3s, 2s, 2s';
+        newText.style.animationTimingFunction = 'ease-in-out, ease-in-out, ease-in-out';
+        newText.style.animationIterationCount = 'infinite';
+      });
+    }
+  </script>
+</body>
+</html>
